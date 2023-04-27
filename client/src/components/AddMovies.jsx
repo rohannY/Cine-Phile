@@ -60,7 +60,7 @@ const AddMovies = () => {
     formData.append("popularity", rating);
     formData.append("movie", videoFile);
     formData.append("cast", castMembers);
-    formData.append("genres", JSON.stringify(genre));
+    formData.append("genres", genre);
     formData.append("keywords", keywords);
     
     console.log(formData.get('genres'));

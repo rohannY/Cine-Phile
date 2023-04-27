@@ -9,6 +9,7 @@ import Admin from "./components/Admin";
 import UpdateMovies from "./components/UpdateMovies";
 import Watch from "./components/pages/Watch";
 import Movie from "./components/pages/Movie";
+import Search from "./components/pages/Search";
 
 function App() {
   return (
@@ -24,6 +25,8 @@ function App() {
           <Route path="/admin/updateMovie" element={<UpdateMovies />} />
           <Route path="/watch" element={<Watch />} />
           <Route path="/movie" element={<Movie />} />
+          <Route path="/search" element={<Search />} />
+
         </Routes>
     </>
   );
