@@ -1,0 +1,32 @@
+import { Route, Routes } from "react-router-dom";
+import Navbar from "./components/Navbar";
+import Account from "./components/pages/Account";
+import Home from "./components/pages/Home";
+import Login from "./components/pages/Login";
+import Signup from "./components/pages/Signup";
+import Community from './components/pages/Community'
+import Admin from "./components/Admin";
+import UpdateMovies from "./components/UpdateMovies";
+import Watch from "./components/pages/Watch";
+import Movie from "./components/pages/Movie";
+
+function App() {
+  return (
+    <>
+        <Navbar />
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/community" element={<Community />} />
+          <Route path="/admin" element={<Admin />} />
+          <Route path="/signup" element={<Signup />} />
+          <Route path="/account" element={<Account />} />
+          <Route path="/admin/updateMovie" element={<UpdateMovies />} />
+          <Route path="/watch" element={<Watch />} />
+          <Route path="/movie" element={<Movie />} />
+        </Routes>
+    </>
+  );
+}
+
+export default App;
