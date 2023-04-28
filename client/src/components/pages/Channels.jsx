@@ -1,8 +1,35 @@
 import copy from "../../assets/Copy.svg";
-
 import React, { useRef, useEffect } from "react";
+import { StreamChat } from 'stream-chat';
+import { Cookies } from "react-cookie";
 
-const Chats = () => {
+const Chats = async () => {
+
+  const apiKey = 'gc8733b2v4gs';
+  const chatClient = StreamChat.getInstance(apiKey);
+  const cookies = new Cookies();
+  const chatToken = cookies.get('chatToken');
+  const id = cookies.get('id')
+  const name = cookies.get('name');
+  const email = cookies.get('email');
+  if (chatToken) {
+    chatClient.connectUser({
+      id: cookies.get('id'),
+      name: cookies.get('name'),
+      email: cookies.get('email')
+    }, chatToken)
+  }
+  const filter = { members: { $in: [id] } };
+  const channels = await chatClient.queryChannels(filter);
+
+
+
+
+
+
+
+
+
   const chatRef = useRef();
   useEffect(() => {
     chatRef.current.scrollTo(0, chatRef.current.scrollHeight);
