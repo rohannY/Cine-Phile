@@ -5,14 +5,15 @@ import { StreamChat } from "stream-chat";
 
 const Chats = () => {
   const apiKey = "gc8733b2v4gs";
-   const chatClient = StreamChat.getInstance(apiKey);
+  const chatClient = StreamChat.getInstance(apiKey);
   const cookies = new Cookies();
   const chatToken = cookies.get("chatToken");
   const id = cookies.get("id");
   const name = cookies.get("name");
   const email = cookies.get("email");
 
-  const 
+  const [currChannel, setcurrChannel] = useState();
+  const [cuurrChannelName, setChannelName] = useState(null);
 
   const [channels, setChannel] = useState();
   if (chatToken) {
@@ -32,7 +33,7 @@ const Chats = () => {
     async function fetchChannels() {
       const filter = { members: { $in: [id] } };
       const data = await chatClient.queryChannels(filter);
-      console.log(data)
+      console.log(data);
       setChannel(data);
     }
     fetchChannels();
@@ -47,7 +48,14 @@ const Chats = () => {
             <h1 className="py-5 px-4 text-3xl">Channels</h1>
             {channels && channels.length > 0 ? (
               channels.map((channel) => (
-                <div className="px-3 py-3" key={channel.id} onClick={()=>{console.log(channel.id)}}>
+                <div
+                  className="px-3 py-3"
+                  key={channel.id}
+                  onClick={() => {
+                    setcurrChannel(channel.id);
+                    setChannelName(channel.data.name);
+                  }}
+                >
                   <div className="space-x-5 flex items-center bg-[#181A1B] px-10 py-4 rounded-3xl cursor-pointer border border-gray-700 hover:drop-shadow-xl ">
                     <p className="text-xl font-medium font-satoshi">
                       {channel.data.name}
@@ -63,7 +71,7 @@ const Chats = () => {
           <div className="h-auto col-span-6 w-full px-3 py-4 rounded-3xl bg-[#232627] mx-6">
             <div className="flex items-center">
               <h1 className="py-5 px-7 text-2xl font-figtree font-medium">
-                Brooklyn 99 Stans
+                {cuurrChannelName}
               </h1>
               <img src={copy} className="h-7 cursor-pointer" />
             </div>
@@ -83,7 +91,6 @@ const Chats = () => {
                 </div>
               </div>
 
-              {/* Chat Box */}
               <div className="flex items-center py-2 px-3 bg-gray-50 rounded-lg dark:bg-[#2D3133]">
                 <textarea
                   id="chat"
@@ -106,8 +113,6 @@ const Chats = () => {
                   </svg>
                 </button>
               </div>
-
-              <div></div>
             </div>
           </div>
 

@@ -1,9 +1,13 @@
 import React, { useEffect, useState } from "react";
-import Channels from './Channels'
+import Channels from "./Channels";
+import { Cookies } from "react-cookie";
+import { StreamChat } from "stream-chat";
+
+
 
 const Community = () => {
-  const [hasChannels, setHasChannels] = useState(true);
-  const [showPrompt, setShowPrompt] = useState(false);
+  const [hasChannels, setHasChannels] = useState(false);
+  const [showPrompt, setShowPrompt] = useState(true);
   const [showCreateChannel, setShowCreateChannel] = useState(false);
   const [showJoinChannel, setShowJoinChannel] = useState(false);
 
@@ -23,6 +27,46 @@ const Community = () => {
     setShowJoinChannel(false);
   };
 
+  const [channelName,setChannelName]=useState("");
+
+  const apiKey = "gc8733b2v4gs";
+  const chatClient = StreamChat.getInstance(apiKey);
+  const cookies = new Cookies();
+  const chatToken = cookies.get("chatToken");
+  const id = cookies.get("id");
+  const name = cookies.get("name");
+  const email = cookies.get("email");
+
+  if (chatToken) {
+    chatClient.connectUser(
+      {
+        id: id,
+        name: name,
+        email: email,
+      },
+      chatToken
+    );
+  }
+  
+  const channelId = "xyzqwerty"; // replace with your desired channel id
+  const channelData = {
+    name: "My Channel Name",
+    members: [id],
+    // add other optional fields as needed
+  };
+
+  const channel = chatClient.channel("messaging", channelId, channelData);
+
+
+  channel
+    .create()
+    .then((response) => {
+      console.log("Channel created successfully:", response.channel);
+    })
+    .catch((error) => {
+      console.error("Error creating channel:", error);
+    });
+
   return (
     <div className="w-full text-white">
       <div className="w-full h-full">
@@ -30,11 +74,10 @@ const Community = () => {
           <div>
             {hasChannels ? (
               <Channels />
-              
             ) : (
               <div>
                 {showPrompt ? (
-                  <div className="flex justify-center font-Satoshi">
+                  <div className="flex justify-center font-satoshi">
                     <div className="text-center w-1/3 space-y-4">
                       <p className="text-4xl font-semibold">
                         Welcome To Community!
@@ -65,41 +108,41 @@ const Community = () => {
                   <div></div>
                 )}
 
-                {showCreateChannel &&
+                {showCreateChannel && (
                   <div className="flex flex-col justify-center">
                     <div className="relative py-3 sm:max-w-xl sm:mx-auto">
                       <div className="relative px-4 py-10 border border-gray-500 mx-8 md:mx-0 shadow rounded-2xl sm:p-10">
                         <div className="max-w-md mx-auto">
                           <div className="flex items-center space-x-5">
                             <div className="block pl-2 font-semibold text-xl self-start text-white">
-                              <h2 className="leading-relaxed text-2xl">Create Channel</h2>
+                              <h2 className="leading-relaxed text-2xl">
+                                Create Channel
+                              </h2>
                               <p className="text-sm text-white font-normal leading-relaxed">
-                                Start a new channel for discussing TV shows and movies with your team or friends and invite others to join.                  </p>
+                                Start a new channel for discussing TV shows and
+                                movies with your team or friends and invite
+                                others to join.{" "}
+                              </p>
                             </div>
                           </div>
                           <div className="divide-y divide-gray-200">
                             <div className="py-5 text-base leading-6 space-y-4 text-white sm:text-lg sm:leading-7">
                               <div className="flex flex-col">
-                                <label className="leading-loose">Channel Name</label>
+                                <label className="leading-loose">
+                                  Channel Name
+                                </label>
                                 <input
                                   type="text"
                                   className="px-4 py-2 border focus:ring-gray-500 focus:border-gray-900 w-full sm:text-sm border-gray-300 rounded-md focus:outline-none text-gray-600"
                                   placeholder="Channel Name"
                                 />
                               </div>
-                              <div className="flex flex-col">
-                                <label className="leading-loose">Description</label>
-                                <textarea
-                                  type="text"
-                                  className="px-4 py-2 h-20 border focus:ring-gray-500 focus:border-gray-900 w-full sm:text-sm border-gray-300 rounded-md focus:outline-none text-gray-600"
-                                  placeholder="Description"
-                                />
-                              </div>
                             </div>
                             <div className="pt-4 flex items-center space-x-4">
                               <button
                                 onClick={handleCancel}
-                                className="flex justify-center items-center w-full text-white border border-white px-4 py-3 rounded-md focus:outline-none">
+                                className="flex justify-center items-center w-full text-white border border-white px-4 py-3 rounded-md focus:outline-none"
+                              >
                                 <svg
                                   className="w-6 h-6 mr-3"
                                   fill="none"
@@ -125,7 +168,7 @@ const Community = () => {
                       </div>
                     </div>
                   </div>
-                }
+                )}
 
                 {showJoinChannel && (
                   <div className="flex flex-col justify-center">
@@ -134,16 +177,21 @@ const Community = () => {
                         <div className="max-w-md mx-auto">
                           <div className="flex items-center space-x-5">
                             <div className="block pl-2 font-semibold text-xl self-start text-white">
-                              <h2 className="leading-relaxed text-2xl">Create Channel</h2>
+                              <h2 className="leading-relaxed text-2xl">
+                                Create Channel
+                              </h2>
                               <p className="text-sm text-white font-normal leading-relaxed">
-                                Connect with others in existing channels and explore new topics.
+                                Connect with others in existing channels and
+                                explore new topics.
                               </p>
                             </div>
                           </div>
                           <div className="divide-y divide-gray-200 ml-2">
                             <div className="py-5 text-base leading-6 space-y-4 text-white sm:text-lg sm:leading-7">
                               <div className="flex flex-col space-y-4">
-                                <label className="leading-loose">Channel Link</label>
+                                <label className="leading-loose">
+                                  Channel Link
+                                </label>
                                 <input
                                   type="text"
                                   className="px-4 py-2 border focus:ring-gray-500 focus:border-gray-900 w-full sm:text-sm border-gray-300 rounded-md focus:outline-none text-gray-600"
@@ -154,7 +202,8 @@ const Community = () => {
                             <div className="pt-4 flex items-center space-x-4">
                               <button
                                 onClick={handleCancel}
-                                className="flex justify-center items-center w-full text-white border border-white px-4 py-3 rounded-md focus:outline-none">
+                                className="flex justify-center items-center w-full text-white border border-white px-4 py-3 rounded-md focus:outline-none"
+                              >
                                 <svg
                                   className="w-6 h-6 mr-3"
                                   fill="none"
