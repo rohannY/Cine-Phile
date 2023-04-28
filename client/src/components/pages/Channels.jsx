@@ -2,6 +2,13 @@ import copy from "../../assets/Copy.svg";
 import { Cookies } from "react-cookie";
 import React, { useRef, useEffect, useState } from "react";
 import { StreamChat } from "stream-chat";
+import {
+  Chat,
+  Channel,
+  ChannelList,
+  MessageList,
+  Window,
+} from "stream-chat-react";
 
 const Chats = () => {
   const apiKey = "gc8733b2v4gs";
@@ -11,9 +18,10 @@ const Chats = () => {
   const id = cookies.get("id");
   const name = cookies.get("name");
   const email = cookies.get("email");
-
+  const [serverMessages, setServerMessages] = useState(null); // Messages from channel
   const [currChannel, setcurrChannel] = useState();
   const [cuurrChannelName, setChannelName] = useState(null);
+  const [channelMessage, setchannelMessage] = useState(""); // message -string- to store present message
 
   const [channels, setChannel] = useState();
   if (chatToken) {
@@ -33,12 +41,25 @@ const Chats = () => {
     async function fetchChannels() {
       const filter = { members: { $in: [id] } };
       const data = await chatClient.queryChannels(filter);
-      console.log(data);
       setChannel(data);
     }
     fetchChannels();
     chatRef.current.scrollTo(0, chatRef.current.scrollHeight);
   }, [id]);
+
+  const handleSubmit = () => {
+    const channel = chatClient.channel("messaging", currChannel);
+    if (channelMessage === "") {
+      return;
+    }
+    const message = {
+      text: channelMessage,
+    };
+    setchannelMessage("");
+    channel.sendMessage(message);
+  };
+
+  const fetchMessages = async () => {};
 
   return (
     <>
@@ -54,6 +75,12 @@ const Chats = () => {
                   onClick={() => {
                     setcurrChannel(channel.id);
                     setChannelName(channel.data.name);
+                    const matchingChannel = channels.find(
+                      (channel) => channel.id === currChannel
+                    );
+                    setServerMessages(
+                      matchingChannel.state.messageSets[0].messages
+                    );
                   }}
                 >
                   <div className="space-x-5 flex items-center bg-[#181A1B] px-10 py-4 rounded-xl cursor-pointer border border-gray-700 hover:drop-shadow-xl ">
@@ -80,15 +107,14 @@ const Chats = () => {
                 className="overflow-y-auto h-[440px] space-y-10 mb-10"
                 ref={chatRef}
               >
-                <div className="px-5 space-y-2">
-                  <p className="text-[#d98900] text-xl font-medium">
-                    John Smith
-                  </p>
-                  <p className="font-light">
-                    Hey guys, have you seen Brooklyn 99? I just finished binging
-                    it and it's hilarious!
-                  </p>
-                </div>
+                {serverMessages?.map((message) => (
+                  <div key={message.id} className="px-5 space-y-2">
+                    <p className="text-[#d98900] text-xl font-medium">
+                      {message.user.name}
+                    </p>
+                    <p className="font-light">{message.text}</p>
+                  </div>
+                ))}
               </div>
 
               <div className="flex items-center py-2 px-3 bg-gray-50 rounded-lg dark:bg-[#2D3133]">
@@ -97,11 +123,13 @@ const Chats = () => {
                   rows={1}
                   className="resize-none outline-none block mx-4 p-2.5 w-full text-sm text-gray-900 bg-white rounded-lg dark:bg-[#2D3133]  dark:placeholder-gray-400 dark:text-white"
                   placeholder="Your message..."
-                  defaultValue={""}
+                  value={channelMessage}
+                  onChange={(e) => setchannelMessage(e.target.value)}
                 />
                 <button
                   type="submit"
                   className="inline-flex justify-center p-2 text-blue-600 rounded-full cursor-pointer hover:bg-blue-100 dark:text-blue-500 dark:hover:bg-gray-600"
+                  onClick={handleSubmit}
                 >
                   <svg
                     className="w-6 h-6 rotate-90"
