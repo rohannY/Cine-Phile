@@ -9,8 +9,9 @@ import {
 const Navbar = () => {
   const navigate = useNavigate();
   const [user] = useState();
-  const [cookies, setCookie, removeCookie] = useCookies(["token"]);
+  const [cookies, setCookie, removeCookie] = useCookies(["token","isAdmin"]);
   const token = cookies.token;
+  const admin = cookies.isAdmin;
 
   const[input,setInput] = useState("");
 
@@ -46,9 +47,11 @@ const Navbar = () => {
             <Link to="/community" className="flex items-center">
               <h1 className="text-white text-xl  cursor-pointer">Community</h1>
             </Link>
+            {admin==="true"?(
             <Link to="/admin" className="flex items-center">
               <h1 className="text-white  text-xl cursor-pointer">Admin</h1>
             </Link>
+            ):null}
           </div>
         ) : null}
       </div>

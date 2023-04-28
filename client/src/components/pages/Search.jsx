@@ -95,11 +95,11 @@ const Search = () => {
             )}{" "}
             {blank ? (
               <div>
-                <p className="text-center text-xl font-figtree text-gray-300 py-10 font-light">
+                <p className="text-center text-xl font-satoshi text-gray-300 py-10 font-light">
                   You can't have a blank space, baby
                 </p>
                 <div className="flex justify-center">
-                  <img src="https://shorturl.at/eqQU8"/>
+                  <img src="https://shorturl.at/eqQU8" className="rounded-2xl"/>
                 </div>
               </div>
             ) : null}

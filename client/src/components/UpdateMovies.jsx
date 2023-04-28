@@ -15,10 +15,11 @@ const UpdateMovies = () => {
   const [language, setLanguage] = useState("");
   const [posterFile, setPosterFile] = useState([]);
   const [videoFile, setVideoFile] = useState([]);
-
   const [videolink,setVideolink]=useState("");
   const [posterlink,setposterlink]=useState("");
 
+  const [baseUrl]="http://localhost:7000";
+  
   const [searchparams] = useSearchParams();
   const id = searchparams.get("id");
 
@@ -45,7 +46,7 @@ const UpdateMovies = () => {
     setCastMembers(data.cast);
     setDescription(data.overview);
     setLanguage(data.language);
-    setVideolink(data.link);
+    setVideolink(data.link ? data.link : data.movie);
     setKeywords(data.keywords)
     setposterlink(data.poster);
   }
