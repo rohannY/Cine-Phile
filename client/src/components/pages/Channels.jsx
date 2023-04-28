@@ -1,39 +1,43 @@
 import copy from "../../assets/Copy.svg";
-import React, { useRef, useEffect } from "react";
-import { StreamChat } from 'stream-chat';
 import { Cookies } from "react-cookie";
+import React, { useRef, useEffect, useState } from "react";
+import { StreamChat } from "stream-chat";
 
-const Chats = async () => {
-
-  const apiKey = 'gc8733b2v4gs';
-  const chatClient = StreamChat.getInstance(apiKey);
+const Chats = () => {
+  const apiKey = "gc8733b2v4gs";
+   const chatClient = StreamChat.getInstance(apiKey);
   const cookies = new Cookies();
-  const chatToken = cookies.get('chatToken');
-  const id = cookies.get('id')
-  const name = cookies.get('name');
-  const email = cookies.get('email');
+  const chatToken = cookies.get("chatToken");
+  const id = cookies.get("id");
+  const name = cookies.get("name");
+  const email = cookies.get("email");
+
+  const 
+
+  const [channels, setChannel] = useState();
   if (chatToken) {
-    chatClient.connectUser({
-      id: cookies.get('id'),
-      name: cookies.get('name'),
-      email: cookies.get('email')
-    }, chatToken)
+    chatClient.connectUser(
+      {
+        id: id,
+        name: name,
+        email: email,
+      },
+      chatToken
+    );
   }
-  const filter = { members: { $in: [id] } };
-  const channels = await chatClient.queryChannels(filter);
-
-
-
-
-
-
-
-
 
   const chatRef = useRef();
+
   useEffect(() => {
+    async function fetchChannels() {
+      const filter = { members: { $in: [id] } };
+      const data = await chatClient.queryChannels(filter);
+      console.log(data)
+      setChannel(data);
+    }
+    fetchChannels();
     chatRef.current.scrollTo(0, chatRef.current.scrollHeight);
-  });
+  }, [id]);
 
   return (
     <>
@@ -41,23 +45,27 @@ const Chats = async () => {
         <div className="grid grid-cols-12">
           <div className="h-auto col-span-3 w-full px-3 py-4 rounded-3xl bg-[#232627]">
             <h1 className="py-5 px-4 text-3xl">Channels</h1>
-            <div className="px-3 py-3">
-              <div className="space-x-5 flex items-center bg-[#181A1B] px-10 py-4 rounded-3xl cursor-pointer border border-gray-700 hover:drop-shadow-xl ">
-                <img
-                  src="https://m.media-amazon.com/images/M/MV5BNzVkYWY4NzYtMWFlZi00YzkwLThhZDItZjcxYTU4ZTMzMDZmXkEyXkFqcGdeQXVyODUxOTU0OTg@._V1_FMjpg_UY1000_.jpg"
-                  className="h-14 w-14 rounded-2xl border border-white"
-                />
-                <p className="text-xl font-medium font-satoshi">Brooklyn 99</p>
-              </div>
-            </div>
+            {channels && channels.length > 0 ? (
+              channels.map((channel) => (
+                <div className="px-3 py-3" key={channel.id} onClick={()=>{console.log(channel.id)}}>
+                  <div className="space-x-5 flex items-center bg-[#181A1B] px-10 py-4 rounded-3xl cursor-pointer border border-gray-700 hover:drop-shadow-xl ">
+                    <p className="text-xl font-medium font-satoshi">
+                      {channel.data.name}
+                    </p>
+                  </div>
+                </div>
+              ))
+            ) : (
+              <p>No channels found</p>
+            )}
           </div>
 
           <div className="h-auto col-span-6 w-full px-3 py-4 rounded-3xl bg-[#232627] mx-6">
             <div className="flex items-center">
-            <h1 className="py-5 px-7 text-2xl font-figtree font-medium">
-              Brooklyn 99 Stans
-            </h1>
-            <img src={copy} className="h-7 cursor-pointer"/>
+              <h1 className="py-5 px-7 text-2xl font-figtree font-medium">
+                Brooklyn 99 Stans
+              </h1>
+              <img src={copy} className="h-7 cursor-pointer" />
             </div>
             <div className="px-3 py-3">
               <div
@@ -73,7 +81,6 @@ const Chats = async () => {
                     it and it's hilarious!
                   </p>
                 </div>
-
               </div>
 
               {/* Chat Box */}
@@ -100,9 +107,7 @@ const Chats = async () => {
                 </button>
               </div>
 
-              <div>
-
-              </div>
+              <div></div>
             </div>
           </div>
 

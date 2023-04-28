@@ -30,6 +30,7 @@ const Community = () => {
           <div>
             {hasChannels ? (
               <Channels />
+              
             ) : (
               <div>
                 {showPrompt ? (
