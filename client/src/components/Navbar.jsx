@@ -16,6 +16,11 @@ const Navbar = () => {
 
   const handleLogout = async () => {
     removeCookie("token");
+    removeCookie("chatToken");
+    removeCookie("id");
+    removeCookie("name");
+    removeCookie("email");
+    removeCookie("isAdmin");
     navigate("/login");
   };
 

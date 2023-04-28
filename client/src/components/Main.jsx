@@ -3,9 +3,23 @@ import React, { useEffect, useState } from "react";
 import requests from "../Requests";
 import { createSearchParams, Link, useNavigate } from "react-router-dom";
 
-const Main = () => {
-  const [movies, setmovies] = useState();
+import { StreamChat } from 'stream-chat';
+import { Chat } from 'stream-chat-react';
+import { Cookies } from 'react-cookie';
 
+const Main = () => {
+  const apiKey = 'gc8733b2v4gs';
+  const client = StreamChat.getInstance(apiKey);
+  const cookies = new Cookies();
+  const authToken = cookies.get("chatToken");
+  if (authToken) {
+    client.connectUser({
+      id: cookies.get('id'),
+      name: cookies.get('name'),
+      email: cookies.get('email')
+    }, authToken)
+  }
+  const [movies, setmovies] = useState();
   function setindex() {
     setIndex(Math.floor(Math.random() * 40) + 1);
   }

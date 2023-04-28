@@ -1,20 +1,21 @@
-import React, { useState,useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { useCookies } from 'react-cookie';
 import axios from 'axios';
+
 
 const Login = () => {
 
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
-    const [cookies, setCookie, removeCookie] = useCookies(['token']);
+    const [cookies, setCookie, removeCookie] = useCookies(['token', 'chatToken', 'id', 'name', 'email', 'isAdmin']);
     const token = cookies.token;
 
     const navigate = useNavigate();
 
     useEffect(() => {
-         if (token) {
+        if (token) {
             navigate('/');  // Redirect to the home page
         }
     }, [cookies]);
@@ -22,24 +23,30 @@ const Login = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-          const response = await axios.post(
-            'http://localhost:7000/api/auth/login',
-             JSON.stringify({email:email,password:password})
-           ,
-            {
-              headers: {
-                'Content-Type': 'application/json',
-              },
+            const response = await axios.post(
+                'http://localhost:7000/api/auth/login',
+                JSON.stringify({ email: email, password: password })
+                ,
+                {
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                }
+            );
+            setCookie('token', response.data.token);
+            setCookie('chatToken', response.data.chatToken);
+            setCookie('id', response.data.user.id)
+            setCookie('name', response.data.user.name);
+            setCookie('email', response.data.user.email);
+            setCookie('isAdmin', response.data.user.isAdmin);
+
+            if (cookies) {
+                navigate('/');
             }
-          );
-          setCookie('token', response.data.token);
-          if(cookies){
-            navigate('/');
-          }
         } catch (error) {
             setError(error);
         }
-      };  
+    };
 
 
     return (

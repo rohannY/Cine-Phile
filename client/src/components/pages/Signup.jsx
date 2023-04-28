@@ -33,8 +33,7 @@ const Signup = () => {
               },
             }
           );
-          setCookie('token', response.data.token);
-          navigate('/');
+          navigate('/login');
         } catch (error) {
           setError(error.response.data.error);
         }

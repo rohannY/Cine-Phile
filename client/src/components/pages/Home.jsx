@@ -11,11 +11,11 @@ const Home = () => {
   const token = cookies.token;
   const navigate = useNavigate();
   useEffect(() => {
-    if (token == "undefined") {
+    if (token === "undefined") {
       removeCookie(token);
       navigate("/login"); // Redirect to the home page
     }
-  }, [cookies]);
+  }, [token]);
 
   return (
     <>
