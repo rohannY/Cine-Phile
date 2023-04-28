@@ -9,6 +9,8 @@ import UpdateMovies from "./components/UpdateMovies";
 import Watch from "./components/pages/Watch";
 import Movie from "./components/pages/Movie";
 import Search from "./components/pages/Search";
+import ResetPassword from "./components/pages/ResetPassword";
+import ForgetPassword from "./components/pages/ForgetPassword";
 
 function App() {
   return (
@@ -24,7 +26,8 @@ function App() {
           <Route path="/watch" element={<Watch />} />
           <Route path="/movie" element={<Movie />} />
           <Route path="/search" element={<Search />} />
-
+          <Route path="/forgot" element={<ForgetPassword />} />
+          <Route path="/reset/*" element={<ResetPassword />} />
         </Routes>
     </>
   );

@@ -22,7 +22,7 @@ const CurrChannel = () => {
   const chatToken = cookies.get("chatToken");
   const id = cookies.get("id");
   const name = cookies.get("name");
-  const filters = { type: "messaging",members: { $in: [id] } };
+  const filters = { type: "messaging", members: { $in: [id] } };
 
   useEffect(() => {
     const newClient = new StreamChat("gc8733b2v4gs");
@@ -49,9 +49,19 @@ const CurrChannel = () => {
 
   if (!client) return null;
 
+
+  const handleSelectChannel = (channel) => {
+    console.log(channel); // channelId of the selected channel
+  }
+
   return (
     <Chat client={client}>
-      <ChannelList filters={filters} sort={sort} options={options} />
+      <ChannelList
+        filters={filters}
+        sort={sort}
+        options={options}
+        onSelect={handleSelectChannel}
+      />
       <Channel>
         <Window>
           <ChannelHeader />
@@ -61,9 +71,6 @@ const CurrChannel = () => {
         <Thread />
       </Channel>
     </Chat>
-
-
-
   );
 };
 

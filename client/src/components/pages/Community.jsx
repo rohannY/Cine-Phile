@@ -29,6 +29,13 @@ const Community = () => {
       chatToken
     );
   }
+
+  async function updateChannelDescription() {
+    const channel = chatClient.channel('messaging', "naruto_1682705414012");
+    const response = await channel.update({ data: { description: "naruto_1682705414012" } });
+    console.log(response.channel.data.description);
+  }
+
   useEffect(() => {
     async function fetchChannels() {
       const filter = { members: { $in: [id] } };

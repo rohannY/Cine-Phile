@@ -45,7 +45,6 @@ const Chats = () => {
       setChannel(data);
     }
     fetchChannels();
-    // chatRef.current.scrollTo(0, chatRef.current.scrollHeight);
   }, [id]);
 
   const handleSubmit = () => {

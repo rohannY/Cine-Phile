@@ -21,7 +21,7 @@ const Prompt = () => {
   const id = cookies.get("id");
   const name = cookies.get("name");
   const email = cookies.get("email");
-  
+
   const members = [id];
 
   const handleCancel = () => {
@@ -79,7 +79,7 @@ const Prompt = () => {
 
     const channelData = {
       name: channelName,
-      members: [id],
+      members: [id, "644b643c410dc6397f0e0a5e"],
     };
     const channel = chatClient.channel("messaging", channelId, channelData);
 
@@ -90,10 +90,33 @@ const Prompt = () => {
         window.location.reload();
       })
       .catch((error) => {
-        console.log( error );
+        console.log(error);
         alert("Error While creating the channel");
       });
   };
+
+  const [channels, setChannel] = useState();
+
+  useEffect(() => {
+    if (chatToken) {
+      chatClient.connectUser(
+        {
+          id: id,
+          name: name,
+          email: email,
+        },
+        chatToken
+      );
+    }
+
+    async function fetchChannels() {
+      const filter = { members: { $in: [id] } };
+      const data = await chatClient.queryChannels(filter);
+      setChannel(data);
+      console.log(data);
+    }
+    fetchChannels();
+  }, [id]);
 
   return (
     <>
@@ -102,9 +125,8 @@ const Prompt = () => {
           <div className="text-center w-1/3 space-y-4">
             <p className="text-4xl font-semibold">Welcome To Community!</p>
             <p className="text-lg">
-              You can create a channel to start a
-              conversation or join an existing channel to join the discussion.
-              Have fun chatting!
+              You can create a channel to start a conversation or join an
+              existing channel to join the discussion. Have fun chatting!
             </p>
             <div className="space-x-20 pt-10">
               <button
@@ -209,6 +231,7 @@ const Prompt = () => {
                         type="text"
                         className="px-4 py-2 border focus:ring-gray-500 focus:border-gray-900 w-full sm:text-sm border-gray-300 rounded-md focus:outline-none text-gray-600"
                         placeholder="Link"
+                        value={joinchannel}
                         onChange={(e) => {
                           setjoinchannel(e.target.value);
                         }}
@@ -246,6 +269,30 @@ const Prompt = () => {
                 </div>
               </div>
             </div>
+          </div>
+          <div className="mx-auto mt-10 border rounded-xl px-20 py-10">
+            <p className="text-center mb-10">Available Channels</p>
+            <table class="table-auto">
+              <thead>
+                <tr>
+                  <th className="pr-10">Channel</th>
+                  <th className="pr-10 text-left">Id</th>
+                </tr>
+              </thead>
+              <tbody>
+                {channels && channels.length > 0
+                  ? channels.map((channel) => (
+                      // <div className="flex space-x-10">
+                      <tr>
+                        <td className="pr-10">{channel.data.name}</td>
+                        <td className="pr-10 cursor-pointer hover:text-red-400" onClick={(e) => {setjoinchannel(channel.data.id);
+                        }}>{channel.data.id}</td>
+                      </tr>
+                      // </div>
+                    ))
+                  : null}
+              </tbody>
+            </table>
           </div>
         </div>
       )}

@@ -89,7 +89,9 @@ const Login = () => {
                   Sign In
                 </button>
                 <div className="flex justify-between items-center text-sm text-gray-600">
-                  <p className="cursor-pointer hover:text-indigo-400">
+                  <p className="cursor-pointer hover:text-indigo-400" onClick={()=>{
+                     navigate("/forgot");
+                  }}>
                     Forget Password
                   </p>
                   <p>Need Help?</p>
