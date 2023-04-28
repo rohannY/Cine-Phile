@@ -4,6 +4,7 @@ import { Cookies } from "react-cookie";
 import { StreamChat } from "stream-chat";
 import Prompt from "./Prompt";
 import Loader from "./Loader";
+import CurrChannel from "./CurrChannel";
 
 const Community = () => {
   const [hasChannels, setHasChannels] = useState(false);
@@ -49,7 +50,7 @@ const Community = () => {
       <div className="w-full h-full">
         <div className="absolute w-full  top-[15%] p-4 md:p-8">
           <div>
-            {isLoading ? <Loader /> : hasChannels ? <Channels /> : <Prompt />}
+            {isLoading ? <Loader /> : hasChannels ? <CurrChannel /> : <Prompt />}
           </div>
         </div>
       </div>

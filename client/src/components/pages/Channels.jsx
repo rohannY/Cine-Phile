@@ -9,6 +9,7 @@ import {
   MessageList,
   Window,
 } from "stream-chat-react";
+import CurrChannel from "./CurrChannel";
 
 const Chats = () => {
   const apiKey = "gc8733b2v4gs";
@@ -44,7 +45,7 @@ const Chats = () => {
       setChannel(data);
     }
     fetchChannels();
-    chatRef.current.scrollTo(0, chatRef.current.scrollHeight);
+    // chatRef.current.scrollTo(0, chatRef.current.scrollHeight);
   }, [id]);
 
   const handleSubmit = () => {
@@ -59,7 +60,16 @@ const Chats = () => {
     channel.sendMessage(message);
   };
 
-  const fetchMessages = async () => {};
+  const fetchMessages = async (chanId,chanName) => {
+    // setServerMessages(
+    //   matchingChannel.state.messageSets[0].messages
+    // );
+    setcurrChannel(chanId);
+    setChannelName(chanName);
+    const channel = chatClient.channel('messaging', currChannel);
+    const messages = await channel.query({ messages: { limit: 10 } });
+    setServerMessages(messages.messages);
+  };
 
   return (
     <>
@@ -72,16 +82,7 @@ const Chats = () => {
                 <div
                   className="px-3 py-3"
                   key={channel.id}
-                  onClick={() => {
-                    setcurrChannel(channel.id);
-                    setChannelName(channel.data.name);
-                    const matchingChannel = channels.find(
-                      (channel) => channel.id === currChannel
-                    );
-                    setServerMessages(
-                      matchingChannel.state.messageSets[0].messages
-                    );
-                  }}
+                  onClick={() => {fetchMessages(channel.id,channel.data.name);}}
                 >
                   <div className="space-x-5 flex items-center bg-[#181A1B] px-10 py-4 rounded-xl cursor-pointer border border-gray-700 hover:drop-shadow-xl ">
                     <p className="text-xl font-medium font-satoshi">
@@ -96,7 +97,7 @@ const Chats = () => {
           </div>
 
           <div className="h-auto col-span-6 w-full px-3 py-4 rounded-3xl bg-[#232627] mx-6">
-            <div className="flex items-center">
+            {/* <div className="flex items-center">
               <h1 className="py-5 px-7 text-2xl font-figtree font-medium">
                 {cuurrChannelName}
               </h1>
@@ -107,6 +108,7 @@ const Chats = () => {
                 className="overflow-y-auto h-[440px] space-y-10 mb-10"
                 ref={chatRef}
               >
+                
                 {serverMessages?.map((message) => (
                   <div key={message.id} className="px-5 space-y-2">
                     <p className="text-[#d98900] text-xl font-medium">
@@ -115,6 +117,8 @@ const Chats = () => {
                     <p className="font-light">{message.text}</p>
                   </div>
                 ))}
+
+
               </div>
 
               <div className="flex items-center py-2 px-3 bg-gray-50 rounded-lg dark:bg-[#2D3133]">
@@ -141,7 +145,9 @@ const Chats = () => {
                   </svg>
                 </button>
               </div>
-            </div>
+            </div> */}
+
+            <CurrChannel/>
           </div>
 
           <div className="h-auto col-span-3 w-max pl-5 pr-28 py-4 rounded-3xl bg-[#232627] ml-10">
