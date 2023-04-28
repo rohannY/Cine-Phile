@@ -56,7 +56,7 @@ const Chats = () => {
                     setChannelName(channel.data.name);
                   }}
                 >
-                  <div className="space-x-5 flex items-center bg-[#181A1B] px-10 py-4 rounded-3xl cursor-pointer border border-gray-700 hover:drop-shadow-xl ">
+                  <div className="space-x-5 flex items-center bg-[#181A1B] px-10 py-4 rounded-xl cursor-pointer border border-gray-700 hover:drop-shadow-xl ">
                     <p className="text-xl font-medium font-satoshi">
                       {channel.data.name}
                     </p>
