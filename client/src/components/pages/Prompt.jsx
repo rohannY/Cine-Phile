@@ -102,7 +102,7 @@ const Prompt = () => {
           <div className="text-center w-1/3 space-y-4">
             <p className="text-4xl font-semibold">Welcome To Community!</p>
             <p className="text-lg">
-              Currently, it's quiet in here. You can create a channel to start a
+              You can create a channel to start a
               conversation or join an existing channel to join the discussion.
               Have fun chatting!
             </p>

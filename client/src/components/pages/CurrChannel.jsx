@@ -11,10 +11,8 @@ import {
   Window,
 } from "stream-chat-react";
 import "@stream-io/stream-chat-css/dist/css/index.css";
-import { ThemeProvider } from 'styled-components';
 import { Cookies } from "react-cookie";
 
-const filters = { type: "messaging" };
 const options = { state: true, presence: true, limit: 10 };
 const sort = { last_message_at: -1 };
 
@@ -24,14 +22,10 @@ const CurrChannel = () => {
   const chatToken = cookies.get("chatToken");
   const id = cookies.get("id");
   const name = cookies.get("name");
-  
+  const filters = { type: "messaging",members: { $in: [id] } };
+
   useEffect(() => {
     const newClient = new StreamChat("gc8733b2v4gs");
-    const theme = {
-        colors: {
-          primary: '#FF00000', // change this to your desired color
-        },
-      };
     const handleConnectionChange = ({ online = false }) => {
       if (!online) return console.log("connection lost");
       setClient(newClient);
@@ -67,6 +61,9 @@ const CurrChannel = () => {
         <Thread />
       </Channel>
     </Chat>
+
+
+
   );
 };
 

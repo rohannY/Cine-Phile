@@ -1,6 +1,5 @@
 import { Route, Routes } from "react-router-dom";
 import Navbar from "./components/Navbar";
-import Account from "./components/pages/Account";
 import Home from "./components/pages/Home";
 import Login from "./components/pages/Login";
 import Signup from "./components/pages/Signup";
@@ -21,7 +20,6 @@ function App() {
           <Route path="/community" element={<Community />} />
           <Route path="/admin" element={<Admin />} />
           <Route path="/signup" element={<Signup />} />
-          <Route path="/account" element={<Account />} />
           <Route path="/admin/updateMovie" element={<UpdateMovies />} />
           <Route path="/watch" element={<Watch />} />
           <Route path="/movie" element={<Movie />} />

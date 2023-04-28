@@ -8,8 +8,8 @@ import CurrChannel from "./CurrChannel";
 
 const Community = () => {
   const [hasChannels, setHasChannels] = useState(false);
-  const [isLoading,setisLoading]=useState(true);
-
+  const [isLoading, setisLoading] = useState(true);
+  const [showButton, setShowButton] = useState(true);
 
   const apiKey = "gc8733b2v4gs";
   const chatClient = StreamChat.getInstance(apiKey);
@@ -18,7 +18,7 @@ const Community = () => {
   const id = cookies.get("id");
   const name = cookies.get("name");
   const email = cookies.get("email");
-  
+
   if (chatToken) {
     chatClient.connectUser(
       {
@@ -30,27 +30,48 @@ const Community = () => {
     );
   }
   useEffect(() => {
-  
-
     async function fetchChannels() {
       const filter = { members: { $in: [id] } };
       const data = await chatClient.queryChannels(filter);
       setisLoading(false);
-      console.log(data);  
+      console.log(data);
       data.length > 0 ? setHasChannels(true) : setHasChannels(false);
     }
     fetchChannels();
   }, [id]);
 
+  const handleButtonClick = () => {
+    setShowButton(false);
+    setHasChannels(false);
+  };
 
-
+  const handleCancel = () => {
+    setShowButton(true);
+    setHasChannels(true);
+  };
 
   return (
     <div className="w-full text-white">
       <div className="w-full h-full">
         <div className="absolute w-full  top-[15%] p-4 md:p-8">
           <div>
-            {isLoading ? <Loader /> : hasChannels ? <CurrChannel /> : <Prompt />}
+            {showButton ? (
+              <button className="px-5 py-3 underline underline-offset-4 relative -mt-20" onClick={handleButtonClick}>
+                Create Or Join Channel
+              </button>
+            ) : (
+              <button className="px-5 py-3 border" onClick={handleCancel}>
+                Cancel
+              </button>
+            )}
+            
+            {isLoading ? (
+              <Loader />
+            ) : hasChannels ? (
+              <CurrChannel />
+            ) : (
+              <Prompt />
+            )}
           </div>
         </div>
       </div>
