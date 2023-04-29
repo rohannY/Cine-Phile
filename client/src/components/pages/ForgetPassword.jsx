@@ -5,8 +5,8 @@ import axios from "axios";
 
 const ForgetPassword = () => {
   const [email, setEmail] = useState("");
-  const [reset, setReset] = useState("");
   const [error, setError] = useState("");
+  const [response, setResponse] = useState("");
   const [cookies, setCookie, removeCookie] = useCookies([
     "token",
     "chatToken",
@@ -33,12 +33,22 @@ const ForgetPassword = () => {
       );
 
       if (response) {
-        setReset(true);
+        setResponse(true);
+        setError("");
       }
     } catch (error) {
       setError(error.response.data.error);
     }
   };
+
+
+  useEffect(() => {
+    if (token) {
+      navigate("/"); // Redirect to the home page
+    }
+  }, []);
+
+
 
   return (
     <>
@@ -60,14 +70,18 @@ const ForgetPassword = () => {
                 onSubmit={handleSubmit}
                 className="w-full flex flex-col py-4"
               >
-                  <input
-                    className="p-3 my-2 bg-gray-700 rounded outline-none "
-                    type="email"
-                    placeholder="Email"
-                    autoComplete="email"
-                    onChange={(e) => setEmail(e.target.value)}
-                  />
-                  <p className="my-3 font-satoshi text-xs">A link will be sent to your email</p>
+                <input
+                  className="p-3 my-2 bg-gray-700 rounded outline-none "
+                  type="email"
+                  placeholder="Email"
+                  autoComplete="email"
+                  onChange={(e) => setEmail(e.target.value)}
+                />
+                {response && (
+                  <p className="p-3 mt-5 bg-green-500 my-2 font-satoshi text-center">
+                    A link sent to your email
+                  </p>
+                )}
                 <button className="bg-red-600 py-3 my-6 rounded font-bold">
                   Forget Password
                 </button>

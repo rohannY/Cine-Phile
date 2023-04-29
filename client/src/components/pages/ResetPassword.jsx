@@ -30,7 +30,7 @@ const ResetPassword = () => {
     e.preventDefault();
     try {
       const response = await axios.post(
-        `http://localhost:7000/api/auth/reset-password/${id}/${token}`,
+        `http://localhost:7000/api/auth/reset-password/${id}/${resetToken}`,
         JSON.stringify({ password: pass }),
         {
           headers: {
@@ -38,7 +38,6 @@ const ResetPassword = () => {
           },
         }
       );
-
       if (response) {
         navigate('/login')
       }
@@ -46,6 +45,12 @@ const ResetPassword = () => {
       setError(error.response.data.error);
     }
   };
+
+  useEffect(() => {
+    if (token) {
+      navigate("/"); // Redirect to the home page
+    }
+  }, []);
 
   return (
     <>
