@@ -39,7 +39,7 @@ const Navbar = () => {
       <div className="flex space-x-10">
         <Link to="/">
           <h1 className="text-red-600 text-4xl font-bold cursor-pointer">
-            NETFLIX
+            CinePhile
           </h1>
         </Link>
         {token ? (
