@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState,useEffect } from "react";
 import change from "../assets/update.svg";
 import x from "../assets/x.svg";
 import axios from "axios";
@@ -9,10 +9,11 @@ import { createSearchParams,Link, useNavigate } from 'react-router-dom'
 const Admin = () => {
   const [update, setUpdate] = useState(true);
   const [movies, setMovies] = useState(false);
-  const [cookies, setCookie, removeCookie] = useCookies(["token"]);
-  
+  const [cookies, setCookie, removeCookie] = useCookies(["token","isAdmin"]);
   const [movie, setMovie] = useState(); //for getting movie data from server
   const baseUrl = "http://localhost:7000";
+
+  const isAdmin=cookies.isAdmin;
 
   const navigate = useNavigate();
 
@@ -56,6 +57,13 @@ const Admin = () => {
     }
   }
 
+  useEffect(() => {
+    if (isAdmin) {
+      console.log(isAdmin);
+      navigate("/"); // Redirect to the home page
+      alert("U are not authorized")
+    }
+  }, []);
   
   const handleUpdate = async (key) => {    
     navigate({
