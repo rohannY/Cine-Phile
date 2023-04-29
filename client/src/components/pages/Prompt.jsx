@@ -110,8 +110,7 @@ const Prompt = () => {
     }
 
     async function fetchChannels() {
-      const filter = { members: { $in: [id] } };
-      const data = await chatClient.queryChannels(filter);
+      const data = await chatClient.queryChannels({});
       setChannel(data);
       console.log(data);
     }
